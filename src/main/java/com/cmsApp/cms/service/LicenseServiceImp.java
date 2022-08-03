@@ -2,7 +2,6 @@ package com.cmsApp.cms.service;
 
 import com.cmsApp.cms.exception.ItemNotFoundException;
 import com.cmsApp.cms.exception.TimeWindowException;
-import com.cmsApp.cms.model.Content;
 import com.cmsApp.cms.model.License;
 import com.cmsApp.cms.repository.ContentRepository;
 import com.cmsApp.cms.repository.LicenseRepository;
@@ -25,7 +24,6 @@ public class LicenseServiceImp implements LicenseService{
     private final ContentServiceImp contentServiceImp;
 
     public void addLicense(License license) throws TimeWindowException {
-
         Long startTime = license.getStartTime();
         Long endTime = license.getEndTime();
 
@@ -38,9 +36,9 @@ public class LicenseServiceImp implements LicenseService{
     }
 
     public void updateLicense(Long licenseId, License license){
-        for (License l: licenseRepository.findAll()){
-            if (licenseId.equals(l.getId())){
-                l.updateLicense(license);
+        for (License existedLicense: licenseRepository.findAll()){
+            if (licenseId.equals(existedLicense.getId())){
+                existedLicense.updateLicense(license);
                 return;
             }
         }
@@ -49,6 +47,11 @@ public class LicenseServiceImp implements LicenseService{
 
     //Delete license
     public void deleteLicense(Long licenseId){
+
+        licenseRepository.deleteByLicenseId(licenseId);
+        //licenseRepository.deleteLicenseFromTable(licenseId);
+
+        /*
         //First, delete license from contents' list
         License license = licenseRepository.findLicenseById(licenseId);
         for (Content content: contentRepository.findAll()){
@@ -56,6 +59,8 @@ public class LicenseServiceImp implements LicenseService{
             if (content.getLicensesOfContent().contains(license))
                 contentServiceImp.deleteLicenseFromContent(content.getId(), licenseId);
         }
+        */
+
         //After deleting from contents' list, delete from repository
         licenseRepository.deleteById(licenseId);
     }

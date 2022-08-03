@@ -114,6 +114,7 @@ public class ContentServiceImp implements ContentService {
         return contentRepository.findById(id)
                 .orElseThrow(()-> new ItemNotFoundException("Content by id:" + id + " was not found"));
     }
+
     //Find all contents
     public List<Content> findAllContents(){
         return contentRepository.findAll();
