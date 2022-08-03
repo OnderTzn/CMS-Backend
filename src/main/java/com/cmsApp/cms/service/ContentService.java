@@ -74,7 +74,8 @@ public class ContentService implements ContentServiceInterface {
     }
 
 
-    @Scheduled(fixedRate = 5000L)
+    //x000 means every x second
+    @Scheduled(fixedRate = 15000L)   //Update status every 15 seconds
     public void updateStatus(){
 
         for (Content c: contentRepository.findAll()){   //contentList

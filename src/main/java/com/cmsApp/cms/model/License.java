@@ -22,7 +22,6 @@ public class License implements Serializable {
     @Column(nullable = false)
     private String name;
 
-
     @JsonIgnore
     @Nullable
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "licensesOfContent")
