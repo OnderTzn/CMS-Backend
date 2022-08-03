@@ -5,7 +5,7 @@ import com.cmsApp.cms.model.Content;
 import com.cmsApp.cms.model.License;
 import com.cmsApp.cms.repository.ContentRepository;
 import com.cmsApp.cms.repository.LicenseRepository;
-import com.cmsApp.cms.service.ContentService;
+import com.cmsApp.cms.service.ContentServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,28 +19,28 @@ import java.util.List;
 @AllArgsConstructor
 public class ContentController {
 
-    private final ContentService contentService;
+    private final ContentServiceImp contentServiceImp;
     private final ContentRepository contentRepository;
     private final LicenseRepository licenseRepository;
 
     //Get all the contents
     @GetMapping("/all")
     public ResponseEntity<List<Content>> getAllContents(){
-        List<Content> contentList = contentService.findAllContents();
+        List<Content> contentList = contentServiceImp.findAllContents();
         return new ResponseEntity<>(contentList, HttpStatus.OK);
     }
 
     //Get content by id
     @GetMapping("/find/{id}")
     public ResponseEntity<Content> getContentById (@PathVariable("id") Long contentId) {
-        Content content = contentService.findContentById(contentId);
+        Content content = contentServiceImp.findContentById(contentId);
         return new ResponseEntity<>(content, HttpStatus.OK);
     }
 
     //Add new content
     @PostMapping("/add")
     public ResponseEntity<Content> addContent(@RequestBody Content content){
-        Content addContent = contentService.addContent(content);
+        Content addContent = contentServiceImp.addContent(content);
         return new ResponseEntity<>(addContent, HttpStatus.CREATED);
     }
 
@@ -48,7 +48,7 @@ public class ContentController {
     //Update a content
     @PutMapping("/update/{contentId}")
     public ResponseEntity<Content> updateContent(@PathVariable Long contentId, @RequestBody Content content){
-        contentService.updateContent(contentId, content);
+        contentServiceImp.updateContent(contentId, content);
         return new ResponseEntity<>(content, HttpStatus.OK);
     }
 
@@ -60,7 +60,7 @@ public class ContentController {
         Content content = contentRepository.findContentById(contentId);
         License license = licenseRepository.findLicenseById(licenseId);
 
-        Content addLicenseToContent = contentService.addLicenseToContent(content, license);
+        Content addLicenseToContent = contentServiceImp.addLicenseToContent(content, license);
         return new ResponseEntity<>(addLicenseToContent, HttpStatus.OK).getBody();
 
     }
@@ -69,7 +69,7 @@ public class ContentController {
     //Delete a content
     @DeleteMapping("/delete/{contentId}")
     public ResponseEntity<?> deleteContent(@PathVariable("contentId") Long contentId){
-        contentService.deleteContent(contentId);
+        contentServiceImp.deleteContent(contentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -81,7 +81,7 @@ public class ContentController {
         Content content = contentRepository.findContentById(contentId);
         License license = licenseRepository.findLicenseById(licenseId);
 
-        contentService.deleteLicenseFromContent(content, license);
+        contentServiceImp.deleteLicenseFromContent(content, license);
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

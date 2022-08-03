@@ -15,8 +15,8 @@ public class LicenseValidation {
     }
 
     public boolean isLicenseExist(License license){
-        for(License i: licenseRepository.findAll()){
-            if(i.equals(license)){
+        for(License existedLicense: licenseRepository.findAll()){
+            if(existedLicense.equals(license)){
                 return true;
             }
         }

@@ -1,43 +1,40 @@
 package com.cmsApp.cms.validation;
 
+import com.cmsApp.cms.Global;
 import com.cmsApp.cms.model.Content;
 import com.cmsApp.cms.model.License;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 @Component
-public class ContentValidation {
+public class ContentValidation extends Global {
 
-    public boolean isLicenseValidForContent(Content content, License license) {
+    public boolean isLicenseValidForContent(Content content, License newLicense) {
         //If the license is already added
-        if (content.getLicensesOfContent().contains(license)){
+        if (content.getLicensesOfContent().contains(newLicense)){
             throw new IllegalArgumentException("The content already has the license.");
         }
         //License is not added, yet
         else {
             //Controls if the license to be added conflicts with other licences.
-            for(License l: content.getLicensesOfContent()){
+            for(License existedLicense: content.getLicensesOfContent()){
                 //Conflict in startTime
-                if((license.getStartTime() < l.getStartTime())
-                        && (license.getEndTime() > l.getStartTime())) {
+                if((newLicense.getStartTime() < existedLicense.getStartTime())
+                        && (newLicense.getEndTime() > existedLicense.getStartTime())) {
                     return false;
                 }
                 //Conflict in the middle
-                else if((license.getStartTime() > l.getStartTime())
-                        && (license.getEndTime() < l.getEndTime())) {
+                else if((newLicense.getStartTime() > existedLicense.getStartTime())
+                        && (newLicense.getEndTime() < existedLicense.getEndTime())) {
                     return false;
                 }
                 //Conflict in the endTime
-                else if((license.getStartTime() < l.getStartTime())
-                        && (license.getEndTime() > l.getEndTime())) {
+                else if((newLicense.getStartTime() < existedLicense.getEndTime())
+                        && (newLicense.getEndTime() > existedLicense.getEndTime())) {
                     return false;
                 }
-                //Conflict in the startTime and endTime
-                else if(license.getStartTime().equals(l.getStartTime())     //Conflict if startTime
-                        || license.getEndTime().equals(l.getEndTime())) {    //OR endTime is equal
+                //Conflict in the startTime or endTime
+                else if(newLicense.getStartTime().equals(existedLicense.getStartTime())     //Conflict if startTime
+                        || newLicense.getEndTime().equals(existedLicense.getEndTime())) {    //OR endTime is equal
                     return false;
                 }
                 //No conflict with other licenses' timeframe
@@ -56,20 +53,8 @@ public class ContentValidation {
     }
 
     public boolean isTimeAvailableToPublished(Long startTime, Long endTime) {
-        /* ---> getLocalTime()
-        LocalDateTime localDateTime = LocalDateTime.now();
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
-        Long localTime = zonedDateTime.toInstant().toEpochMilli();
-        */
-
-        Long localTime = getLocalTime();
+        Long localTime = Global.getLocalTime();
         //If current time is in the license's time frame, return true
         return (startTime < localTime) && (endTime > localTime);
-    }
-
-    public Long getLocalTime(){
-        LocalDateTime localDateTime = LocalDateTime.now();
-        ZonedDateTime zonedDateTime = ZonedDateTime.of(localDateTime, ZoneId.systemDefault());
-        return zonedDateTime.toInstant().toEpochMilli();
     }
 }

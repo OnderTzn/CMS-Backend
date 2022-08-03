@@ -7,8 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ContentRepository extends JpaRepository<Content, Long> {
 
-    //void deleteContentById(Long id);    //Query method
-
     Content findContentById(Long contentId);
 
     default boolean isContentExist(Long contentId){
