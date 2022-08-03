@@ -12,7 +12,9 @@ public interface LicenseRepository extends JpaRepository<License, Long> {
 
     //void deleteLicenseById(Long id);
 
-    License findLicenseById(Long licenseId);    //Optional<License> findLicenseById(Long licenseId)
+    License findLicenseById(Long licenseId);
+
+    //Query to delete a license's connection with contents before deleting the license
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM content_licenses_of_content WHERE license_id = :licenseId", nativeQuery = true)

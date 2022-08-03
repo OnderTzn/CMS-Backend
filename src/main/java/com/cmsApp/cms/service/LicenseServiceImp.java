@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 @Transactional
 @AllArgsConstructor
-public class LicenseServiceImp implements LicenseService{
+public class LicenseServiceImp implements LicenseService {
 
     private final LicenseRepository licenseRepository;
     private final ContentRepository contentRepository;
@@ -30,14 +30,13 @@ public class LicenseServiceImp implements LicenseService{
         if (licenseValidation.isLicenseTimeValid(startTime, endTime)) {
             license.setLicenseCode(UUID.randomUUID().toString());
             licenseRepository.save(license);
-        }
-        else
+        } else
             throw new TimeWindowException("Start time should be earlier than end time.");
     }
 
-    public void updateLicense(Long licenseId, License license){
-        for (License existedLicense: licenseRepository.findAll()){
-            if (licenseId.equals(existedLicense.getId())){
+    public void updateLicense(Long licenseId, License license) {
+        for (License existedLicense : licenseRepository.findAll()) {
+            if (licenseId.equals(existedLicense.getId())) {
                 existedLicense.updateLicense(license);
                 return;
             }
@@ -46,32 +45,18 @@ public class LicenseServiceImp implements LicenseService{
     }
 
     //Delete license
-    public void deleteLicense(Long licenseId){
-
+    public void deleteLicense(Long licenseId) {
         licenseRepository.deleteByLicenseId(licenseId);
-        //licenseRepository.deleteLicenseFromTable(licenseId);
-
-        /*
-        //First, delete license from contents' list
-        License license = licenseRepository.findLicenseById(licenseId);
-        for (Content content: contentRepository.findAll()){
-            assert content.getLicensesOfContent() != null;
-            if (content.getLicensesOfContent().contains(license))
-                contentServiceImp.deleteLicenseFromContent(content.getId(), licenseId);
-        }
-        */
-
         //After deleting from contents' list, delete from repository
         licenseRepository.deleteById(licenseId);
     }
 
-    public License findLicenseById(Long licenseId){
+    public License findLicenseById(Long licenseId) {
         return licenseRepository.findById(licenseId)
-                .orElseThrow(()-> new ItemNotFoundException(("License by id:" + licenseId + " was not found")));
+                .orElseThrow(() -> new ItemNotFoundException(("License by id:" + licenseId + " was not found")));
     }
 
-    public List<License> findAllLicenses(){
+    public List<License> findAllLicenses() {
         return licenseRepository.findAll();
     }
-
 }

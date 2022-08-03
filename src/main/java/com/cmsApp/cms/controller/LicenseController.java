@@ -14,20 +14,20 @@ import java.util.List;
 @RequestMapping("/license")
 @CrossOrigin
 @AllArgsConstructor
-public class LicenseController{
+public class LicenseController {
 
     private final LicenseServiceImp licenseServiceImp;
 
     //Get all the license
     @GetMapping("/all")
-    public ResponseEntity<List<License>> getAllLicenses(){
+    public ResponseEntity<List<License>> getAllLicenses() {
         List<License> licenses = licenseServiceImp.findAllLicenses();
         return new ResponseEntity<>(licenses, HttpStatus.OK);
     }
 
     //Get license by id
     @GetMapping("/find/{id}")
-    public ResponseEntity<License> getLicenseById (@PathVariable("id") Long id) {
+    public ResponseEntity<License> getLicenseById(@PathVariable("id") Long id) {
         License license = licenseServiceImp.findLicenseById(id);
         return new ResponseEntity<>(license, HttpStatus.OK);
     }
@@ -41,14 +41,14 @@ public class LicenseController{
 
     //Update a license
     @PutMapping("/update{licenseId}")
-    public ResponseEntity<License> updateLicense(@PathVariable Long licenseId, @RequestBody License license){
+    public ResponseEntity<License> updateLicense(@PathVariable Long licenseId, @RequestBody License license) {
         licenseServiceImp.updateLicense(licenseId, license);
         return new ResponseEntity<>(license, HttpStatus.OK);
     }
 
     //Delete a license
     @DeleteMapping("/delete/{licenseId}")
-    public ResponseEntity<?> deleteLicense(@PathVariable("licenseId") Long licenseId){
+    public ResponseEntity<?> deleteLicense(@PathVariable("licenseId") Long licenseId) {
         licenseServiceImp.deleteLicense(licenseId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

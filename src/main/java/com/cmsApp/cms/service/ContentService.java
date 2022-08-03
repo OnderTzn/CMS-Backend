@@ -10,15 +10,19 @@ import java.util.List;
 public interface ContentService {
 
     Content addContent(Content content);
+
     Content addLicenseToContent(Long contentId, Long licenseId) throws TimeWindowException;
 
     void deleteContent(Long id);
+
     void deleteLicenseFromContent(Long contentId, Long licenseId);
 
     void updateContent(Long contentId, Content content);
+
     void updateStatus();
 
     Content findContentById(Long id);
+
     List<Content> findAllContents();
 
 }

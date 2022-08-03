@@ -20,28 +20,28 @@ public class ContentController {
 
     //Get all the contents
     @GetMapping("/all")
-    public ResponseEntity<List<Content>> getAllContents(){
+    public ResponseEntity<List<Content>> getAllContents() {
         List<Content> contentList = contentServiceImp.findAllContents();
         return new ResponseEntity<>(contentList, HttpStatus.OK);
     }
 
     //Get content by id
     @GetMapping("/find/{id}")
-    public ResponseEntity<Content> getContentById (@PathVariable("id") Long contentId) {
+    public ResponseEntity<Content> getContentById(@PathVariable("id") Long contentId) {
         Content content = contentServiceImp.findContentById(contentId);
         return new ResponseEntity<>(content, HttpStatus.OK);
     }
 
     //Add new content
     @PostMapping("/add")
-    public ResponseEntity<Content> addContent(@RequestBody Content content){
+    public ResponseEntity<Content> addContent(@RequestBody Content content) {
         Content addContent = contentServiceImp.addContent(content);
         return new ResponseEntity<>(addContent, HttpStatus.CREATED);
     }
 
     //Update a content
     @PutMapping("/update/{contentId}")
-    public ResponseEntity<Content> updateContent(@PathVariable Long contentId, @RequestBody Content content){
+    public ResponseEntity<Content> updateContent(@PathVariable Long contentId, @RequestBody Content content) {
         contentServiceImp.updateContent(contentId, content);
         return new ResponseEntity<>(content, HttpStatus.OK);
     }
@@ -56,7 +56,7 @@ public class ContentController {
 
     //Delete a content
     @DeleteMapping("/delete/{contentId}")
-    public ResponseEntity<?> deleteContent(@PathVariable("contentId") Long contentId){
+    public ResponseEntity<?> deleteContent(@PathVariable("contentId") Long contentId) {
         contentServiceImp.deleteContent(contentId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

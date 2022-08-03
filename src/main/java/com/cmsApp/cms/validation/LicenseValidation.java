@@ -1,6 +1,5 @@
 package com.cmsApp.cms.validation;
 
-
 import com.cmsApp.cms.model.License;
 import com.cmsApp.cms.repository.LicenseRepository;
 import org.springframework.stereotype.Component;
@@ -14,13 +13,12 @@ public class LicenseValidation {
         return startTime < endTime;     //if startTime smaller, return true
     }
 
-    public boolean isLicenseExist(License license){
-        for(License existedLicense: licenseRepository.findAll()){
-            if(existedLicense.equals(license)){
+    public boolean isLicenseExist(License license) {
+        for (License existedLicense : licenseRepository.findAll()) {
+            if (existedLicense.equals(license)) {
                 return true;
             }
         }
         return false;
     }
-
 }

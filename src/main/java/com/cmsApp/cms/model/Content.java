@@ -35,7 +35,6 @@ public class Content implements Serializable {
     )
     private List<License> licensesOfContent = new ArrayList<>();
 
-
     @Column
     private String posterUrl;
 
@@ -45,22 +44,23 @@ public class Content implements Serializable {
     @Column
     private String contentCode;
 
-
+    //Add a license to a content
     public void addLicenseToContent(License license) {
         licensesOfContent.add(license);
     }
 
+    //Delete a license from a content
     public void deleteLicenseFromContent(License license) {
         licensesOfContent.remove(license);
     }
 
     //Update only name and videoUrl
-    public void updateContent(Content content){
+    public void updateContent(Content content) {
         this.name = content.name;
         this.videoUrl = content.videoUrl;
     }
 
-    public String toString(){
+    public String toString() {
         return "Content{" +
                 "id= " + id +
                 ", name= " + name +
@@ -69,6 +69,4 @@ public class Content implements Serializable {
                 ", videoUrl=" + videoUrl +
                 '}';
     }
-
-
 }

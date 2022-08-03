@@ -26,7 +26,7 @@ public class ContentServiceImp implements ContentService {
     private final LicenseRepository licenseRepository;
 
     //Add Content
-    public Content addContent(Content content){
+    public Content addContent(Content content) {
         content.setContentCode(UUID.randomUUID().toString());
         return contentRepository.save(content);
     }
@@ -37,17 +37,16 @@ public class ContentServiceImp implements ContentService {
         Content content = contentRepository.findContentById(contentId);
         License license = licenseRepository.findLicenseById(licenseId);
 
-        if(contentValidation.isLicenseValidForContent(content, license)){
+        if (contentValidation.isLicenseValidForContent(content, license)) {
             content.addLicenseToContent(license);
             return contentRepository.save(content);
-        }
-        else
+        } else
             throw new TimeWindowException("Time windows is overlapped.");
     }
 
 
     //Delete Content
-    public void deleteContent(Long id){
+    public void deleteContent(Long id) {
         contentRepository.deleteById(id);
     }
 
@@ -57,22 +56,20 @@ public class ContentServiceImp implements ContentService {
         License license = licenseRepository.findLicenseById(licenseId);
 
         if (contentRepository.isContentExist(contentId)) {
-            if (contentValidation.isLicenseInList(content, license)){
-            content.deleteLicenseFromContent(license);
-            }
-            else {
+            if (contentValidation.isLicenseInList(content, license)) {
+                content.deleteLicenseFromContent(license);
+            } else {
                 throw new ItemNotFoundException("There is no license in the list with this id.");
             }
-        }
-        else
+        } else
             throw new ItemNotFoundException("There is no content with this id");
     }
 
 
     //Update Content
-    public void updateContent(Long contentId, Content content){
-        for (Content c: contentRepository.findAll()){
-            if(contentId.equals(c.getId())){
+    public void updateContent(Long contentId, Content content) {
+        for (Content c : contentRepository.findAll()) {
+            if (contentId.equals(c.getId())) {
                 c.updateContent(content);
                 return;
             }
@@ -83,16 +80,16 @@ public class ContentServiceImp implements ContentService {
 
     //x000 means every x second
     @Scheduled(fixedRate = 15000L)   //Update status every 15 seconds
-    public void updateStatus(){
-        for (Content content: contentRepository.findAll()){   //contentList
+    public void updateStatus() {
+        for (Content content : contentRepository.findAll()) {   //contentList
             boolean shouldPublished = false;
             assert content.getLicensesOfContent() != null;
-            for (License license: content.getLicensesOfContent()){
+            for (License license : content.getLicensesOfContent()) {
                 Long startTime = license.getStartTime();
                 Long endTime = license.getEndTime();
 
                 //The content's status should be Published, if true
-                if (contentValidation.isTimeAvailableToPublished(startTime, endTime)){  //(startTime < localTime) && (endTime > localTime)
+                if (contentValidation.isTimeAvailableToPublished(startTime, endTime)) {  //(startTime < localTime) && (endTime > localTime)
                     //Change status of the content
                     content.setStatus(Status.Published);
                     contentRepository.save(content);
@@ -102,7 +99,7 @@ public class ContentServiceImp implements ContentService {
             }
             //The content's status should be InProgress
             //if it should be Published, this statement will not run
-            if(!shouldPublished) {
+            if (!shouldPublished) {
                 content.setStatus(Status.InProgress);
                 contentRepository.save(content);
             }
@@ -110,13 +107,13 @@ public class ContentServiceImp implements ContentService {
     }
 
     //Find content
-    public Content findContentById(Long id){
+    public Content findContentById(Long id) {
         return contentRepository.findById(id)
-                .orElseThrow(()-> new ItemNotFoundException("Content by id:" + id + " was not found"));
+                .orElseThrow(() -> new ItemNotFoundException("Content by id:" + id + " was not found"));
     }
 
     //Find all contents
-    public List<Content> findAllContents(){
+    public List<Content> findAllContents() {
         return contentRepository.findAll();
     }
 }

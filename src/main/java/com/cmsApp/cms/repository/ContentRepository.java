@@ -9,7 +9,7 @@ public interface ContentRepository extends JpaRepository<Content, Long> {
 
     Content findContentById(Long contentId);
 
-    default boolean isContentExist(Long contentId){
+    default boolean isContentExist(Long contentId) {
         //if content exist, return true
         return findContentById(contentId) != null;
     }

@@ -10,30 +10,30 @@ public class ContentValidation extends Global {
 
     public boolean isLicenseValidForContent(Content content, License newLicense) {
         //If the license is already added
-        if (content.getLicensesOfContent().contains(newLicense)){
+        if (content.getLicensesOfContent().contains(newLicense)) {
             throw new IllegalArgumentException("The content already has the license.");
         }
         //License is not added, yet
         else {
             //Controls if the license to be added conflicts with other licences.
-            for(License existedLicense: content.getLicensesOfContent()){
+            for (License existedLicense : content.getLicensesOfContent()) {
                 //Conflict in startTime
-                if((newLicense.getStartTime() < existedLicense.getStartTime())
+                if ((newLicense.getStartTime() < existedLicense.getStartTime())
                         && (newLicense.getEndTime() > existedLicense.getStartTime())) {
                     return false;
                 }
                 //Conflict in the middle
-                else if((newLicense.getStartTime() > existedLicense.getStartTime())
+                else if ((newLicense.getStartTime() > existedLicense.getStartTime())
                         && (newLicense.getEndTime() < existedLicense.getEndTime())) {
                     return false;
                 }
                 //Conflict in the endTime
-                else if((newLicense.getStartTime() < existedLicense.getEndTime())
+                else if ((newLicense.getStartTime() < existedLicense.getEndTime())
                         && (newLicense.getEndTime() > existedLicense.getEndTime())) {
                     return false;
                 }
                 //Conflict in the startTime or endTime
-                else if(newLicense.getStartTime().equals(existedLicense.getStartTime())     //Conflict if startTime
+                else if (newLicense.getStartTime().equals(existedLicense.getStartTime())     //Conflict if startTime
                         || newLicense.getEndTime().equals(existedLicense.getEndTime())) {    //OR endTime is equal
                     return false;
                 }
@@ -47,7 +47,7 @@ public class ContentValidation extends Global {
         }
     }
 
-    public boolean isLicenseInList(Content content, License license){
+    public boolean isLicenseInList(Content content, License license) {
         //if license is in the list, return true
         return content.getLicensesOfContent().contains(license);
     }

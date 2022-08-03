@@ -37,12 +37,13 @@ public class License implements Serializable {
     @Column(nullable = false, updatable = false)
     private String licenseCode;
 
-    //Update only name and videoUrl
-    public void updateLicense(License license){
+    //Update only name, startTime and endTime
+    public void updateLicense(License license) {
         this.name = license.name;
         this.startTime = license.startTime;
         this.endTime = license.endTime;
     }
+
     @Override
     public String toString() {
         return "License{" +
@@ -52,6 +53,4 @@ public class License implements Serializable {
                 ", endTime= " + endTime +
                 "}";
     }
-
-
 }
