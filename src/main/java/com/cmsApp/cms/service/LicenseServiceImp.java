@@ -2,7 +2,9 @@ package com.cmsApp.cms.service;
 
 import com.cmsApp.cms.exception.ItemNotFoundException;
 import com.cmsApp.cms.exception.TimeWindowException;
+import com.cmsApp.cms.model.Content;
 import com.cmsApp.cms.model.License;
+import com.cmsApp.cms.repository.ContentRepository;
 import com.cmsApp.cms.repository.LicenseRepository;
 import com.cmsApp.cms.validation.LicenseValidation;
 import lombok.AllArgsConstructor;
@@ -18,8 +20,9 @@ import java.util.UUID;
 public class LicenseServiceImp implements LicenseService{
 
     private final LicenseRepository licenseRepository;
+    private final ContentRepository contentRepository;
     private final LicenseValidation licenseValidation;
-
+    private final ContentServiceImp contentServiceImp;
 
     public void addLicense(License license) throws TimeWindowException {
 
@@ -34,12 +37,26 @@ public class LicenseServiceImp implements LicenseService{
             throw new TimeWindowException("Start time should be earlier than end time.");
     }
 
-    public License updateLicense(License license){
-        return licenseRepository.save(license);
+    public void updateLicense(Long licenseId, License license){
+        for (License l: licenseRepository.findAll()){
+            if (licenseId.equals(l.getId())){
+                l.updateLicense(license);
+                return;
+            }
+        }
+        throw new ItemNotFoundException("License not found with this id.");
     }
 
-
+    //Delete license
     public void deleteLicense(Long licenseId){
+        //First, delete license from contents' list
+        License license = licenseRepository.findLicenseById(licenseId);
+        for (Content content: contentRepository.findAll()){
+            assert content.getLicensesOfContent() != null;
+            if (content.getLicensesOfContent().contains(license))
+                contentServiceImp.deleteLicenseFromContent(content.getId(), licenseId);
+        }
+        //After deleting from contents' list, delete from repository
         licenseRepository.deleteById(licenseId);
     }
 

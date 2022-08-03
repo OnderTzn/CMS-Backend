@@ -6,6 +6,7 @@ import com.cmsApp.cms.model.Content;
 import com.cmsApp.cms.model.License;
 import com.cmsApp.cms.model.Status;
 import com.cmsApp.cms.repository.ContentRepository;
+import com.cmsApp.cms.repository.LicenseRepository;
 import com.cmsApp.cms.validation.ContentValidation;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,6 +23,7 @@ public class ContentServiceImp implements ContentService {
 
     private final ContentRepository contentRepository;
     private final ContentValidation contentValidation;
+    private final LicenseRepository licenseRepository;
 
     //Add Content
     public Content addContent(Content content){
@@ -30,7 +32,10 @@ public class ContentServiceImp implements ContentService {
     }
 
     //Add License to Content
-    public Content addLicenseToContent(Content content, License license) throws TimeWindowException {
+    public Content addLicenseToContent(Long contentId, Long licenseId) throws TimeWindowException {
+
+        Content content = contentRepository.findContentById(contentId);
+        License license = licenseRepository.findLicenseById(licenseId);
 
         if(contentValidation.isLicenseValidForContent(content, license)){
             content.addLicenseToContent(license);
@@ -47,11 +52,13 @@ public class ContentServiceImp implements ContentService {
     }
 
     //Delete License from Content
-    public void deleteLicenseFromContent(Content content, License license) {
-        if (contentRepository.isContentExist(content.getId())) {
+    public void deleteLicenseFromContent(Long contentId, Long licenseId) {
+        Content content = contentRepository.findContentById(contentId);
+        License license = licenseRepository.findLicenseById(licenseId);
+
+        if (contentRepository.isContentExist(contentId)) {
             if (contentValidation.isLicenseInList(content, license)){
             content.deleteLicenseFromContent(license);
-
             }
             else {
                 throw new ItemNotFoundException("There is no license in the list with this id.");
@@ -77,18 +84,18 @@ public class ContentServiceImp implements ContentService {
     //x000 means every x second
     @Scheduled(fixedRate = 15000L)   //Update status every 15 seconds
     public void updateStatus(){
-
-        for (Content c: contentRepository.findAll()){   //contentList
+        for (Content content: contentRepository.findAll()){   //contentList
             boolean shouldPublished = false;
-            for (License l: c.getLicensesOfContent()){
-                Long startTime = l.getStartTime();
-                Long endTime = l.getEndTime();
+            assert content.getLicensesOfContent() != null;
+            for (License license: content.getLicensesOfContent()){
+                Long startTime = license.getStartTime();
+                Long endTime = license.getEndTime();
 
                 //The content's status should be Published, if true
                 if (contentValidation.isTimeAvailableToPublished(startTime, endTime)){  //(startTime < localTime) && (endTime > localTime)
                     //Change status of the content
-                    c.setStatus(Status.Published);
-                    contentRepository.save(c);
+                    content.setStatus(Status.Published);
+                    contentRepository.save(content);
                     shouldPublished = true;
                     break;
                 }
@@ -96,23 +103,19 @@ public class ContentServiceImp implements ContentService {
             //The content's status should be InProgress
             //if it should be Published, this statement will not run
             if(!shouldPublished) {
-                c.setStatus(Status.InProgress);
-                contentRepository.save(c);
+                content.setStatus(Status.InProgress);
+                contentRepository.save(content);
             }
         }
     }
-
 
     //Find content
     public Content findContentById(Long id){
         return contentRepository.findById(id)
                 .orElseThrow(()-> new ItemNotFoundException("Content by id:" + id + " was not found"));
     }
-
-
+    //Find all contents
     public List<Content> findAllContents(){
         return contentRepository.findAll();
     }
-
-
 }

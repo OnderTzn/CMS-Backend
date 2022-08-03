@@ -8,7 +8,7 @@ import java.util.List;
 public interface LicenseService {
 
     void addLicense(License license) throws TimeWindowException;
-    License updateLicense(License license);
+    void updateLicense(Long licenseId, License license);
     void deleteLicense(Long licenseId);
     License findLicenseById(Long licenseId);
     List<License> findAllLicenses();

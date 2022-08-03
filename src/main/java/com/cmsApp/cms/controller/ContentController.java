@@ -2,9 +2,6 @@ package com.cmsApp.cms.controller;
 
 import com.cmsApp.cms.exception.TimeWindowException;
 import com.cmsApp.cms.model.Content;
-import com.cmsApp.cms.model.License;
-import com.cmsApp.cms.repository.ContentRepository;
-import com.cmsApp.cms.repository.LicenseRepository;
 import com.cmsApp.cms.service.ContentServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +17,6 @@ import java.util.List;
 public class ContentController {
 
     private final ContentServiceImp contentServiceImp;
-    private final ContentRepository contentRepository;
-    private final LicenseRepository licenseRepository;
 
     //Get all the contents
     @GetMapping("/all")
@@ -44,7 +39,6 @@ public class ContentController {
         return new ResponseEntity<>(addContent, HttpStatus.CREATED);
     }
 
-
     //Update a content
     @PutMapping("/update/{contentId}")
     public ResponseEntity<Content> updateContent(@PathVariable Long contentId, @RequestBody Content content){
@@ -56,15 +50,9 @@ public class ContentController {
     @PutMapping("/{contentId}/license/{licenseId}")
     public Content addLicenseToContent(@PathVariable Long contentId,
                                        @PathVariable Long licenseId) throws TimeWindowException {
-
-        Content content = contentRepository.findContentById(contentId);
-        License license = licenseRepository.findLicenseById(licenseId);
-
-        Content addLicenseToContent = contentServiceImp.addLicenseToContent(content, license);
+        Content addLicenseToContent = contentServiceImp.addLicenseToContent(contentId, licenseId);
         return new ResponseEntity<>(addLicenseToContent, HttpStatus.OK).getBody();
-
     }
-
 
     //Delete a content
     @DeleteMapping("/delete/{contentId}")
@@ -77,13 +65,7 @@ public class ContentController {
     @DeleteMapping("/delete/{contentId}/license/{licenseId}")
     public ResponseEntity<?> deleteLicenseFromContent(@PathVariable("contentId") Long contentId,
                                                       @PathVariable("licenseId") Long licenseId) {
-
-        Content content = contentRepository.findContentById(contentId);
-        License license = licenseRepository.findLicenseById(licenseId);
-
-        contentServiceImp.deleteLicenseFromContent(content, license);
-
+        contentServiceImp.deleteLicenseFromContent(contentId, licenseId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 }
