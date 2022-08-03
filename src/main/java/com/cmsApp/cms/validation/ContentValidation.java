@@ -1,6 +1,6 @@
 package com.cmsApp.cms.validation;
 
-import com.cmsApp.cms.Global;
+import com.cmsApp.cms.global.Global;
 import com.cmsApp.cms.model.Content;
 import com.cmsApp.cms.model.License;
 import org.springframework.stereotype.Component;

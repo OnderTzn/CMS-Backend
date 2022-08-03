@@ -1,4 +1,4 @@
-package com.cmsApp.cms;
+package com.cmsApp.cms.global;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
