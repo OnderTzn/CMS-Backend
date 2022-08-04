@@ -20,7 +20,7 @@ public class ContentValidation extends Global {
                 //Conflict in startTime
                 if ((newLicense.getStartTime() < existedLicense.getStartTime())
                         && (newLicense.getEndTime() > existedLicense.getStartTime())) {
-                    return false;
+                    return false;   //throw exeption here instead of in service
                 }
                 //Conflict in the middle
                 else if ((newLicense.getStartTime() > existedLicense.getStartTime())
