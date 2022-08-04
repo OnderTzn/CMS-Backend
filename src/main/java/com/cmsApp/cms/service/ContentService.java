@@ -23,6 +23,8 @@ public interface ContentService {
 
     Content findContentById(Long id);
 
+    Content findContentByName(String contentName);
+
     List<Content> findAllContents();
 
 }
