@@ -26,9 +26,16 @@ public class ContentController {
     }
 
     //Get content by id
-    @GetMapping("/find/{id}")
+    @GetMapping("/find/id/{id}")
     public ResponseEntity<Content> getContentById(@PathVariable("id") Long contentId) {
         Content content = contentServiceImp.findContentById(contentId);
+        return new ResponseEntity<>(content, HttpStatus.OK);
+    }
+
+    //Get content by name
+    @GetMapping("/find/name/{name}")
+    public ResponseEntity<Content> getContentByName(@PathVariable("name") String contentName){
+        Content content = contentServiceImp.findContentByName(contentName);
         return new ResponseEntity<>(content, HttpStatus.OK);
     }
 
