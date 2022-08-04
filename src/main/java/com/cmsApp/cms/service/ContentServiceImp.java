@@ -106,12 +106,13 @@ public class ContentServiceImp implements ContentService {
         }
     }
 
-    //Find content
+    //Find content by id
     public Content findContentById(Long id) {
         return contentRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFoundException("Content by id:" + id + " was not found"));
     }
 
+    //Find content by name
     public Content findContentByName(String contentName) {
         return contentRepository.findByName(contentName);
     }
