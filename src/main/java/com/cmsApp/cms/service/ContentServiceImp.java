@@ -83,7 +83,7 @@ public class ContentServiceImp implements ContentService {
     public void updateStatus() {
         for (Content content : contentRepository.findAll()) {   //contentList
             boolean shouldPublished = false;
-            assert content.getLicensesOfContent() != null;
+            assert content.getLicensesOfContent() != null;  //Is putting this here safe?
             for (License license : content.getLicensesOfContent()) {
                 Long startTime = license.getStartTime();
                 Long endTime = license.getEndTime();
