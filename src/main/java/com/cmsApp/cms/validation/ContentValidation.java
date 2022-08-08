@@ -1,5 +1,6 @@
 package com.cmsApp.cms.validation;
 
+import com.cmsApp.cms.exception.TimeWindowException;
 import com.cmsApp.cms.global.Global;
 import com.cmsApp.cms.model.Content;
 import com.cmsApp.cms.model.License;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ContentValidation extends Global {
 
-    public boolean isLicenseValidForContent(Content content, License newLicense) {
+    public boolean isLicenseValidForContent(Content content, License newLicense) throws TimeWindowException {
         //If the license is already added
         if (content.getLicensesOfContent().contains(newLicense)) {
             throw new IllegalArgumentException("The content already has the license.");
@@ -20,22 +21,22 @@ public class ContentValidation extends Global {
                 //Conflict in startTime
                 if ((newLicense.getStartTime() < existedLicense.getStartTime())
                         && (newLicense.getEndTime() > existedLicense.getStartTime())) {
-                    return false;   //throw exeption here instead of in service
+                   throw new TimeWindowException("Time windows is overlapped.");
                 }
                 //Conflict in the middle
                 else if ((newLicense.getStartTime() > existedLicense.getStartTime())
                         && (newLicense.getEndTime() < existedLicense.getEndTime())) {
-                    return false;
+                    throw new TimeWindowException("Time windows is overlapped.");
                 }
                 //Conflict in the endTime
                 else if ((newLicense.getStartTime() < existedLicense.getEndTime())
                         && (newLicense.getEndTime() > existedLicense.getEndTime())) {
-                    return false;
+                    throw new TimeWindowException("Time windows is overlapped.");
                 }
                 //Conflict in the startTime or endTime
                 else if (newLicense.getStartTime().equals(existedLicense.getStartTime())     //Conflict if startTime
                         || newLicense.getEndTime().equals(existedLicense.getEndTime())) {    //OR endTime is equal
-                    return false;
+                    throw new TimeWindowException("Time windows is overlapped.");
                 }
                 //No conflict with other licenses' timeframe
                 else {
