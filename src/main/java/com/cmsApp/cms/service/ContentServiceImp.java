@@ -89,7 +89,7 @@ public class ContentServiceImp implements ContentService {
                 Long endTime = license.getEndTime();
 
                 //The content's status should be Published, if true
-                if (contentValidation.isTimeAvailableToPublished(startTime, endTime)) {  //(startTime < localTime) && (endTime > localTime)
+                if (contentValidation.isTimeAvailableToPublish(startTime, endTime)) {  //(startTime < localTime) && (endTime > localTime)
                     //Change status of the content
                     content.setStatus(Status.Published);
                     contentRepository.save(content);

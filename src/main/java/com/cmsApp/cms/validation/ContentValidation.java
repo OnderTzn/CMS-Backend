@@ -53,7 +53,7 @@ public class ContentValidation extends Global {
         return content.getLicensesOfContent().contains(license);
     }
 
-    public boolean isTimeAvailableToPublished(Long startTime, Long endTime) {
+    public boolean isTimeAvailableToPublish(Long startTime, Long endTime) {
         Long localTime = Global.getLocalTime();
         //If current time is in the license's time frame, return true
         return (startTime < localTime) && (endTime > localTime);
