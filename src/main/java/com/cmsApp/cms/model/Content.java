@@ -17,14 +17,14 @@ public class Content implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) //Auto increment the id
-    @Column(updatable = false) //nullable = false,
+    @Column(updatable = false)
     private Long id;
 
-    @Column//nullable = false,
+    @Column
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column //nullable = false,
+    @Column
     private Status status = Status.InProgress;
 
     @Nullable
