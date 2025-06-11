@@ -39,7 +39,9 @@ public class ContentValidation extends Global {
             }
             // Conflict in the startTime or endTime
             if (newLicense.getStartTime().equals(existedLicense.getStartTime())
-                    || newLicense.getEndTime().equals(existedLicense.getEndTime())) {
+                    || newLicense.getEndTime().equals(existedLicense.getEndTime())
+                    || newLicense.getEndTime().equals(existedLicense.getStartTime())
+                    || newLicense.getStartTime().equals(existedLicense.getEndTime())) {
                 throw new TimeWindowException("Time window is overlapped.");
             }
         }
