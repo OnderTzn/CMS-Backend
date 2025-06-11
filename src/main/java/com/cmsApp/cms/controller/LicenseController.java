@@ -40,7 +40,7 @@ public class LicenseController {
     }
 
     //Update a license
-    @PutMapping("/update{licenseId}")
+    @PutMapping("/update/{licenseId}")
     public ResponseEntity<License> updateLicense(@PathVariable Long licenseId, @RequestBody License license) {
         licenseServiceImp.updateLicense(licenseId, license);
         return new ResponseEntity<>(license, HttpStatus.OK);
