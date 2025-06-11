@@ -34,14 +34,14 @@ public class ContentServiceImp implements ContentService {
     //Add License to Content
     public Content addLicenseToContent(Long contentId, Long licenseId) throws TimeWindowException {
 
-        Content content = contentRepository.findContentById(contentId);
-        License license = licenseRepository.findLicenseById(licenseId);
+        Content content = contentRepository.findById(contentId)
+                .orElseThrow(() -> new ItemNotFoundException("Content not found with this id."));
+        License license = licenseRepository.findById(licenseId)
+                .orElseThrow(() -> new ItemNotFoundException("License not found with this id."));
 
-        if (contentValidation.isLicenseValidForContent(content, license)) {
-            content.addLicenseToContent(license);
-            return contentRepository.save(content);
-        } else
-            throw new TimeWindowException("Time window is overlapped.");
+        contentValidation.isLicenseValidForContent(content, license);
+        content.addLicenseToContent(license);
+        return contentRepository.save(content);
     }
 
 
