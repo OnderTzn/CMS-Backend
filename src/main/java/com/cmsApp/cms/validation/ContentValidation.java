@@ -20,7 +20,7 @@ public class ContentValidation extends Global {
             return true;
         }
 
-        // Controls if the license to be added conflicts with other licences.
+        // Controls if the license to be added conflicts with other licenses.
         for (License existedLicense : content.getLicensesOfContent()) {
             // Conflict in startTime
             if ((newLicense.getStartTime() < existedLicense.getStartTime())
