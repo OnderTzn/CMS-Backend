@@ -10,42 +10,37 @@ import org.springframework.stereotype.Component;
 public class ContentValidation extends Global {
 
     public boolean isLicenseValidForContent(Content content, License newLicense) throws TimeWindowException {
-        //If the license is already added
+        // If the license is already added
         if (content.getLicensesOfContent().contains(newLicense)) {
             throw new IllegalArgumentException("The content already has the license.");
         }
-        //License is not added, yet
-        else {
-            //Controls if the license to be added conflicts with other licences.
-            for (License existedLicense : content.getLicensesOfContent()) {
-                //Conflict in startTime
-                if ((newLicense.getStartTime() < existedLicense.getStartTime())
-                        && (newLicense.getEndTime() > existedLicense.getStartTime())) {
-                   throw new TimeWindowException("Time windows is overlapped.");
-                }
-                //Conflict in the middle
-                else if ((newLicense.getStartTime() > existedLicense.getStartTime())
-                        && (newLicense.getEndTime() < existedLicense.getEndTime())) {
-                    throw new TimeWindowException("Time windows is overlapped.");
-                }
-                //Conflict in the endTime
-                else if ((newLicense.getStartTime() < existedLicense.getEndTime())
-                        && (newLicense.getEndTime() > existedLicense.getEndTime())) {
-                    throw new TimeWindowException("Time windows is overlapped.");
-                }
-                //Conflict in the startTime or endTime
-                else if (newLicense.getStartTime().equals(existedLicense.getStartTime())     //Conflict if startTime
-                        || newLicense.getEndTime().equals(existedLicense.getEndTime())) {    //OR endTime is equal
-                    throw new TimeWindowException("Time windows is overlapped.");
-                }
-                //No conflict with other licenses' timeframe
-                else {
-                    return true;
-                }
+
+        // Controls if the license to be added conflicts with other licences.
+        for (License existedLicense : content.getLicensesOfContent()) {
+            // Conflict in startTime
+            if ((newLicense.getStartTime() < existedLicense.getStartTime())
+                    && (newLicense.getEndTime() > existedLicense.getStartTime())) {
+                throw new TimeWindowException("Time windows is overlapped.");
             }
-            //Content's license list is empty
-            return true;
+            // Conflict in the middle
+            else if ((newLicense.getStartTime() > existedLicense.getStartTime())
+                    && (newLicense.getEndTime() < existedLicense.getEndTime())) {
+                throw new TimeWindowException("Time windows is overlapped.");
+            }
+            // Conflict in the endTime
+            else if ((newLicense.getStartTime() < existedLicense.getEndTime())
+                    && (newLicense.getEndTime() > existedLicense.getEndTime())) {
+                throw new TimeWindowException("Time windows is overlapped.");
+            }
+            // Conflict in the startTime or endTime
+            else if (newLicense.getStartTime().equals(existedLicense.getStartTime())
+                    || newLicense.getEndTime().equals(existedLicense.getEndTime())) {
+                throw new TimeWindowException("Time windows is overlapped.");
+            }
         }
+
+        // No conflict with other licenses or license list is empty
+        return true;
     }
 
     public boolean isLicenseInList(Content content, License license) {
