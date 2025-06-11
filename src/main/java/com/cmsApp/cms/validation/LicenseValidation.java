@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 public class LicenseValidation {
 
     public boolean isLicenseTimeValid(Long startTime, Long endTime) {
-        return startTime < endTime;     //if startTime smaller, return true
+        // returns true when startTime is earlier than endTime
+        return startTime < endTime;
     }
 }
