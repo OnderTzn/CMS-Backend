@@ -42,6 +42,6 @@ This repository contains a Spring Boot based backend for a simple content manage
 - `GET /license/all` – list all licenses
 - `GET /license/find/{id}` – get a license by ID
 - `POST /license/add` – create a new license
-- `PUT /license/update{licenseId}` – update a license
+- `PUT /license/update/{licenseId}` – update a license
 - `DELETE /license/delete/{licenseId}` – delete a license
 
