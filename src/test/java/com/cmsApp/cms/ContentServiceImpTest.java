@@ -93,4 +93,21 @@ public class ContentServiceImpTest {
         assertSame(content, result);
         assertTrue(content.getLicensesOfContent().contains(license));
     }
+
+    @Test
+    void addLicenseWithUnknownIdsThrows() {
+        ContentRepository contentRepository = Mockito.mock(ContentRepository.class);
+        LicenseRepository licenseRepository = Mockito.mock(LicenseRepository.class);
+        ContentValidation validation = Mockito.mock(ContentValidation.class);
+        ContentServiceImp service = new ContentServiceImp(contentRepository, validation, licenseRepository);
+
+        Long contentId = 10L;
+        Long licenseId = 20L;
+
+        Mockito.when(contentRepository.findById(contentId)).thenReturn(Optional.empty());
+        Mockito.when(licenseRepository.findById(licenseId)).thenReturn(Optional.of(new License()));
+
+        assertThrows(ItemNotFoundException.class,
+                () -> service.addLicenseToContent(contentId, licenseId));
+    }
 }
