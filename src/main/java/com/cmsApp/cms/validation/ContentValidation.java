@@ -25,22 +25,22 @@ public class ContentValidation extends Global {
             // Conflict in startTime
             if ((newLicense.getStartTime() < existedLicense.getStartTime())
                     && (newLicense.getEndTime() > existedLicense.getStartTime())) {
-                throw new TimeWindowException("Time windows is overlapped.");
+                throw new TimeWindowException("Time window is overlapped.");
             }
             // Conflict in the middle
             if ((newLicense.getStartTime() > existedLicense.getStartTime())
                     && (newLicense.getEndTime() < existedLicense.getEndTime())) {
-                throw new TimeWindowException("Time windows is overlapped.");
+                throw new TimeWindowException("Time window is overlapped.");
             }
             // Conflict in the endTime
             if ((newLicense.getStartTime() < existedLicense.getEndTime())
                     && (newLicense.getEndTime() > existedLicense.getEndTime())) {
-                throw new TimeWindowException("Time windows is overlapped.");
+                throw new TimeWindowException("Time window is overlapped.");
             }
             // Conflict in the startTime or endTime
             if (newLicense.getStartTime().equals(existedLicense.getStartTime())
                     || newLicense.getEndTime().equals(existedLicense.getEndTime())) {
-                throw new TimeWindowException("Time windows is overlapped.");
+                throw new TimeWindowException("Time window is overlapped.");
             }
         }
 
