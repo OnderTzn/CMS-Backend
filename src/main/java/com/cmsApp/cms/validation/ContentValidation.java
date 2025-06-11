@@ -15,6 +15,11 @@ public class ContentValidation extends Global {
             throw new IllegalArgumentException("The content already has the license.");
         }
 
+        // If there are no existing licenses, nothing to validate
+        if (content.getLicensesOfContent().isEmpty()) {
+            return true;
+        }
+
         // Controls if the license to be added conflicts with other licences.
         for (License existedLicense : content.getLicensesOfContent()) {
             // Conflict in startTime
@@ -23,17 +28,17 @@ public class ContentValidation extends Global {
                 throw new TimeWindowException("Time windows is overlapped.");
             }
             // Conflict in the middle
-            else if ((newLicense.getStartTime() > existedLicense.getStartTime())
+            if ((newLicense.getStartTime() > existedLicense.getStartTime())
                     && (newLicense.getEndTime() < existedLicense.getEndTime())) {
                 throw new TimeWindowException("Time windows is overlapped.");
             }
             // Conflict in the endTime
-            else if ((newLicense.getStartTime() < existedLicense.getEndTime())
+            if ((newLicense.getStartTime() < existedLicense.getEndTime())
                     && (newLicense.getEndTime() > existedLicense.getEndTime())) {
                 throw new TimeWindowException("Time windows is overlapped.");
             }
             // Conflict in the startTime or endTime
-            else if (newLicense.getStartTime().equals(existedLicense.getStartTime())
+            if (newLicense.getStartTime().equals(existedLicense.getStartTime())
                     || newLicense.getEndTime().equals(existedLicense.getEndTime())) {
                 throw new TimeWindowException("Time windows is overlapped.");
             }
