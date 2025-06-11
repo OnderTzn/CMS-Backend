@@ -82,8 +82,8 @@ public class ContentServiceImp implements ContentService {
     @Scheduled(fixedRate = 15000L)   //Update status every 15 seconds
     public void updateStatus() {
         for (Content content : contentRepository.findAll()) {   //contentList
-            boolean shouldPublished = false;
-            assert content.getLicensesOfContent() != null;  //Is putting this here safe?
+            boolean shouldBePublished = false;
+            assert content.getLicensesOfContent() != null;  //ensure license list is not null
             for (License license : content.getLicensesOfContent()) {
                 Long startTime = license.getStartTime();
                 Long endTime = license.getEndTime();
@@ -93,13 +93,13 @@ public class ContentServiceImp implements ContentService {
                     //Change status of the content
                     content.setStatus(Status.Published);
                     contentRepository.save(content);
-                    shouldPublished = true;
+                    shouldBePublished = true;
                     break;
                 }
             }
             //The content's status should be InProgress
             //if it should be Published, this statement will not run
-            if (!shouldPublished) {
+            if (!shouldBePublished) {
                 content.setStatus(Status.InProgress);
                 contentRepository.save(content);
             }
