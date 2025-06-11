@@ -41,7 +41,7 @@ public class ContentServiceImp implements ContentService {
             content.addLicenseToContent(license);
             return contentRepository.save(content);
         } else
-            throw new TimeWindowException("Time windows is overlapped.");
+            throw new TimeWindowException("Time window is overlapped.");
     }
 
 
