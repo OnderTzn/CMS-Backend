@@ -26,6 +26,10 @@ This repository contains a Spring Boot based backend for a simple content manage
 ./mvnw test
 ```
 
+Running the above command executes the unit tests located under
+`src/test/java`. Maven will automatically download required dependencies on
+the first run. If all tests pass, the build is considered healthy.
+
 ## REST Endpoints
 
 ### Content
